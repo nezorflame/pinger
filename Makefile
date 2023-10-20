@@ -1,4 +1,4 @@
-CMD:=example-telegram-bot
+CMD:=pinger
 MODULE:=github.com/nezorflame/$(CMD)
 PKG_LIST:=$(shell go list -f '{{.Dir}}' ./...)
 GIT_HASH?=$(shell git log --format="%h" -n 1 2> /dev/null)
@@ -21,6 +21,12 @@ export PATH:=$(PWD)/bin:$(PATH)
 deps:
 	$(info #Installing dependencies...)
 	go mod download
+
+# install tool binaries: linter, mockgen, etc.
+.PHONY: tools
+tools:
+	$(info #Installing tools...)
+	cd tools && go generate -tags tools
 
 # install project dependencies with tidy
 .PHONY: tidy
@@ -72,19 +78,13 @@ fast-build: deps
 	@echo
 
 .PHONY: build
-build: deps fast-build test
+build: deps fast-build test lint
 
 .PHONY: install
 install: deps
 	$(info #Installing binaries...)
 	$(shell $(BUILD_ENVPARMS) go install .)
 	@echo
-
-# install tools binary: linter, mockgen, etc.
-.PHONY: tools
-tools:
-	$(info #Installing tools...)
-	cd tools && go generate -tags tools
 
 # run linter
 .PHONY: lint

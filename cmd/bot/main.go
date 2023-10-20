@@ -4,15 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"golang.org/x/exp/slog"
-
-	"github.com/nezorflame/example-telegram-bot/internal/bolt"
-	"github.com/nezorflame/example-telegram-bot/internal/bot"
-	"github.com/nezorflame/example-telegram-bot/internal/config"
+	"github.com/nezorflame/pinger/internal/bolt"
+	"github.com/nezorflame/pinger/internal/bot"
+	"github.com/nezorflame/pinger/internal/config"
 )
 
 // Config flags.
@@ -49,11 +48,11 @@ func main() {
 	defer cancel()
 
 	// init logger
-	slogOptions := slog.HandlerOptions{
+	slogOptions := &slog.HandlerOptions{
 		AddSource: true,
 		Level:     slogLevel,
 	}
-	log := slog.New(slogOptions.NewTextHandler(os.Stdout))
+	log := slog.New(slog.NewTextHandler(os.Stdout, slogOptions))
 	log.Info("Launching the bot...")
 
 	// error reporting

@@ -1,6 +1,6 @@
 //go:build tools
 
-//go:generate go build -o ../bin/mockgen github.com/golang/mock/mockgen
+//go:generate go build -o ../bin/mockgen go.uber.org/mock/mockgen
 //go:generate bash -c "go build -ldflags \"-X 'main.version=$(go list -m -f '{{.Version}}' github.com/golangci/golangci-lint)' -X 'main.commit=test' -X 'main.date=test'\" -o ../bin/golangci-lint github.com/golangci/golangci-lint/cmd/golangci-lint"
 //go:generate go build -o ../bin/gosimports github.com/rinchsan/gosimports/cmd/gosimports
 //go:generate go build -o ../bin/gofumpt mvdan.cc/gofumpt
@@ -10,8 +10,8 @@
 package tools
 
 import (
-	_ "github.com/golang/mock/mockgen"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
 	_ "github.com/rinchsan/gosimports/cmd/gosimports"
+	_ "go.uber.org/mock/mockgen"
 	_ "mvdan.cc/gofumpt"
 )
